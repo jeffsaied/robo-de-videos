@@ -10,7 +10,7 @@ Produz vídeos **sem limite por dia** (quantos pedir; agendado, 1 por dia) para 
 | 2. Roteiro | Escreve o roteiro só com o texto da fonte, na estrutura do canal (curiosidade → meio sem entregar → CTA → resposta) | Sim (1 chamada) |
 | 3. Fatos | Confere o roteiro contra a fonte; se achar problema, reescreve uma vez | Sim (1–2 chamadas) |
 | 4. Montar | `fabrica_tiktok.py`: imagens do Commons com licença conferida, voz edge-tts, legenda sincronizada, 1080×1920 | Não |
-| 5. Conferir | Duração, resolução, áudio, tamanho, créditos, licença NC e palavras a vigiar | Não |
+| 5. Conferir | Duração, resolução, áudio, tamanho, créditos, licença NC, palavras a vigiar, **volume (-14 LUFS)**, **pronúncia (faster-whisper)** e **imagem repetida dos últimos 10 vídeos** (`robo\conferencias.py`) | Não |
 | 6. Fila | `robo\fila\<data>_<canal>_<tema>\`: vídeo, legenda do TikTok, hashtags, título/descrição/tags do YouTube, fontes e licenças | Não |
 
 Cada etapa fica gravada em `robo\robo.db` (SQLite). Se o ciclo cair, o próximo **retoma da etapa que faltou**. Dois ciclos ao mesmo tempo são bloqueados (`robo\robo.lock`). Um tema usado nunca volta.
@@ -21,9 +21,10 @@ Cada etapa fica gravada em `robo\robo.db` (SQLite). Se o ciclo cair, o próximo 
 - Legenda de baixo = a fala, palavra por palavra, com números escritos como se escrevem; nenhum bloco termina em "não/nem/nunca/sem".
 - Voz corrida: pontuação real, pausa de no máximo 0,32 s no fim da frase e 0,16 s dentro dela (0,7 s só em cena de suspense).
 - Corte das cenas casado pela escrita de cada palavra: a última palavra de uma frase não vaza para a cena seguinte.
-- Só imagem com licença livre (nada NC), com crédito no post; ilustração leva o selo ILUSTRAÇÃO.
+- Só imagem com licença livre (nada NC), com crédito no post; ilustração leva o selo ILUSTRAÇÃO, **inclusive sozinho**: `motores\imagens.py` lê o título e a descrição do Commons (artist's impression, illustration, concept, rendering, representation...).
 - Conferência de fatos confere um por um ano, década, número e nome contra a fonte.
 - Ao postar no TikTok, escolher cada hashtag na lista que aparece ao digitar (fica num tom mais escuro).
+- Trava de conta: `tarefas\conta_tiktok.js` confere a conta logada no TikTok contra `canal.json` → `tiktok.conta` (canal em `CANAL`, padrão arquivo-dark). `legenda_tiktok.js` e `hashtags_tiktok.js` chamam a trava antes de mexer no post; se a conta for outra, ou se o TikTok estiver deslogado, param sem fazer nada. Teste: `node tarefas\conta_tiktok.js <canal>`.
 
 ## Comandos (PowerShell, na pasta `C:\canal-dark`)
 

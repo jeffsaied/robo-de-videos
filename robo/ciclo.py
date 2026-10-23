@@ -173,7 +173,24 @@ def etapa_conferir(canal, pasta, rot):
         problemas.append('imagem com licença NC')
     if vigiar:
         problemas.append('palavras a conferir na fala: ' + ', '.join(vigiar))
-    return {'duracao': round(dur, 1), 'problemas': problemas, 'creditos': creditos}
+    # pronuncia (faster-whisper) e volume final: avisos para quem aprova, nao travam a fila
+    from robo import conferencias
+    lufs = conferencias.volume(final)
+    if lufs is None or abs(lufs + 14) > 1.5:
+        problemas.append(f'volume {lufs} LUFS (alvo -14)')
+    pasta_canal = os.path.dirname(os.path.dirname(os.path.abspath(pasta)))   # canais\<canal>\saida\<video> -> canais\<canal>
+    for img, antes in conferencias.repetidas(pasta, pasta_canal):
+        problemas.append(f'imagem {img} já apareceu em {antes} (trocar para não parecer template)')
+    try:
+        pron = conferencias.pronuncia(pasta, rot)
+    except Exception as e:                           # sem whisper ou audio estranho: avisa e segue
+        pron = {'feito': False, 'motivo': str(e), 'suspeitos': []}
+    if pron['suspeitos']:
+        problemas.append('ouvir a pronúncia de: ' + ', '.join(f"{x['nome']} (cena {x['cena']})" for x in pron['suspeitos']))
+    elif not pron['feito']:
+        problemas.append('pronúncia não conferida: ' + pron.get('motivo', ''))
+    return {'duracao': round(dur, 1), 'problemas': problemas, 'creditos': creditos,
+            'lufs': lufs, 'pronuncia': pron.get('suspeitos', []), 'transcricao': pron.get('transcricao', '')}
 
 
 # ---------- 5. fila para a pessoa postar (sem IA) ----------

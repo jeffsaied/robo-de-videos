@@ -15,6 +15,10 @@ import requests
 
 AGENTE = {'User-Agent': 'FabricaDeCanais/1.0 (https://github.com/jeffsaied)'}
 RECUSAR = re.compile(r'\bNC\b|NonCommercial', re.I)
+# concepcao artistica nao pode passar por foto: o selo ILUSTRACAO entra sozinho quando o Commons diz isso
+ILUSTRACAO = re.compile(r"artist.{0,3}s? (impression|concept|rendering|illustration)|artist concept|illustration|"
+                        r"\bconcept art\b|\brendering\b|\brender\b|\brepresentation\b|\bvisuali[sz]ation\b|\bCGI\b|"
+                        r"\b3D model\b|ilustra[cç][aã]o|concep[cç][aã]o art[ií]stica|representa[cç][aã]o art", re.I)
 
 
 def _get(url, **kw):
@@ -31,12 +35,13 @@ def baixar(fonte, destino, largura=2400):
     ficha = destino + '.credito.json'
     if os.path.exists(destino) and os.path.exists(ficha):
         credito = json.load(open(ficha, encoding='utf-8'))
-        if credito['titulo'] == fonte['commons'] and credito.get('quadro') == fonte.get('quadro'):   # mesma fonte: reaproveita
+        if (credito['titulo'] == fonte['commons'] and credito.get('quadro') == fonte.get('quadro')
+                and 'ilustracao' in credito):                    # mesma fonte: reaproveita (ficha antiga e refeita)
             return dict(credito, autor=fonte.get('autor', credito['autor']))
     titulo = fonte['commons']
     q = 'https://commons.wikimedia.org/w/api.php?' + urllib.parse.urlencode({
         'action': 'query', 'format': 'json', 'titles': titulo, 'prop': 'imageinfo',
-        'iiprop': 'url|extmetadata', 'iiurlwidth': largura, 'iiextmetadatafilter': 'LicenseShortName|Artist'})
+        'iiprop': 'url|extmetadata', 'iiurlwidth': largura, 'iiextmetadatafilter': 'LicenseShortName|Artist|ImageDescription|ObjectName'})
     pag = list(_get(q).json()['query']['pages'].values())[0]
     if 'imageinfo' not in pag:
         raise FileNotFoundError(f'nao existe no Commons: {titulo}')
@@ -59,7 +64,9 @@ def baixar(fonte, destino, largura=2400):
     else:                              # audio vai inteiro (url original); imagem vem redimensionada (thumburl)
         with open(destino, 'wb') as f:
             f.write(_get(info['url'] if fonte.get('audio') else info.get('thumburl', info['url'])).content)
+    descricao = ' '.join(re.sub(r'<[^>]+>', ' ', meta.get(k, {}).get('value', '')) for k in ('ImageDescription', 'ObjectName'))
     credito = {'titulo': titulo, 'autor': fonte.get('autor', autor), 'licenca': licenca, 'quadro': fonte.get('quadro'),
+               'ilustracao': bool(ILUSTRACAO.search(titulo + ' ' + descricao)),
                'pagina': 'https://commons.wikimedia.org/wiki/' + urllib.parse.quote(titulo.replace(' ', '_'))}
     json.dump(credito, open(ficha, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     time.sleep(3)

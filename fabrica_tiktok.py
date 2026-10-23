@@ -340,7 +340,7 @@ def gerar(canal_id, roteiro_id):
             para_tela = recortar(os.path.join(fontes_dir, c['imagem'] + '.jpg'), *c['recorte'], destino)
             if c.get('marcador'):
                 marcador(destino, para_tela(*c['marcador']['seta']), c['marcador']['rotulo'], perfil)
-            if rot['fontes'][c['imagem']].get('ilustracao'):
+            if rot['fontes'][c['imagem']].get('ilustracao') or creditos[c['imagem']].get('ilustracao'):   # roteiro OU Commons
                 selo(destino, 'ILUSTRAÇÃO', perfil)
             elif rot['fontes'][c['imagem']].get('selo'):              # ex.: "OUTRO BÓLIDO, 2020" em foto de outro evento
                 selo(destino, rot['fontes'][c['imagem']]['selo'], perfil)

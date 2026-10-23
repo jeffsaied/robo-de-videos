@@ -14,7 +14,7 @@ ORIGEM = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DESTINO = r'C:\robo-de-videos'
 ARQUIVOS = ['app_robo.py', 'canal.py', 'fabrica_tiktok.py', 'graficos.py', '.env.example',
             'motores/__init__.py', 'motores/imagens.py', 'motores/voz.py',
-            'robo/__init__.py', 'robo/__main__.py', 'robo/banco.py', 'robo/ciclo.py', 'robo/ia.py', 'robo/pesquisa.py',
+            'robo/__init__.py', 'robo/__main__.py', 'robo/banco.py', 'robo/ciclo.py', 'robo/ia.py', 'robo/pesquisa.py', 'robo/conferencias.py',
             'robo/exportar.py', 'robo/LEIA.md']
 CANAIS = ['casos-curiosos']
 PESSOAIS = ('claude_exe', 'aviso_celular', 'telegram_config', 'telegram_nome', 'telegram_canal')
