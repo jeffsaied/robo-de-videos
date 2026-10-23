@@ -11,7 +11,7 @@ import subprocess
 import sys
 import threading
 
-VERSAO = '1.0.0'
+VERSAO = '1.0.1'
 REPO = 'jeffsaied/robo-de-videos'
 CONGELADO = getattr(sys, 'frozen', False)
 SEM_JANELA = 0x08000000   # CREATE_NO_WINDOW
@@ -104,7 +104,19 @@ def janela():
 
     raiz = tk.Tk()
     raiz.title(f'Robô de Vídeos {VERSAO}')
-    raiz.geometry('720x520')
+    pos = os.path.join(DADOS, 'robo', 'janela.txt')   # abre onde foi fechada da ultima vez
+    try:
+        raiz.geometry(open(pos).read().strip())
+    except (OSError, tk.TclError):
+        raiz.geometry('720x520')
+
+    def fechar():
+        try:
+            open(pos, 'w').write(raiz.geometry())
+        except OSError:
+            pass
+        raiz.destroy()
+    raiz.protocol('WM_DELETE_WINDOW', fechar)
     canais = sorted(d for d in os.listdir(os.path.join(DADOS, 'canais'))
                     if os.path.exists(os.path.join(DADOS, 'canais', d, 'canal.json')))
     topo = ttk.Frame(raiz, padding=8)
