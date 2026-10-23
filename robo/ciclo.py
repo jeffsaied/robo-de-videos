@@ -181,6 +181,9 @@ def etapa_conferir(canal, pasta, rot):
     pasta_canal = os.path.dirname(os.path.dirname(os.path.abspath(pasta)))   # canais\<canal>\saida\<video> -> canais\<canal>
     for img, antes in conferencias.repetidas(pasta, pasta_canal):
         problemas.append(f'imagem {img} já apareceu em {antes} (trocar para não parecer template)')
+    textos = conferencias.texto_nas_imagens(pasta, rot)          # None = Tesseract nao instalado neste PC
+    for cena, txt in textos or []:
+        problemas.append(f'texto dentro da imagem da cena {cena}: "{txt}" (rótulo em inglês ou cortado? recortar ou trocar)')
     try:
         pron = conferencias.pronuncia(pasta, rot)
     except Exception as e:                           # sem whisper ou audio estranho: avisa e segue

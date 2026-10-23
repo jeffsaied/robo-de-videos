@@ -145,7 +145,7 @@ NOSSOS = {'ilustracao', 'foto', 'real', 'reconstrucao', 'replica', 'moderna', 't
           'hidrofone', 'noaa', 'outro', 'bolido', 'som', 'acelerado', 'oumuamua', 'cisne', 'de', 'da', 'do'}
 
 
-def texto_nas_imagens(pasta, rot, confianca=70):
+def texto_nas_imagens(pasta, rot, confianca=88):
     """Le as imagens das cenas de foto (img<N>.jpg, ja recortadas como no video) e devolve [(cena, texto)] quando
     sobra texto que nao e nosso (selo, marcador): rotulo em ingles, letreiro cortado, marca d'agua. Grafico proprio
     e pulado. Sem Tesseract instalado, volta None."""
@@ -172,8 +172,8 @@ def texto_nas_imagens(pasta, rot, confianca=70):
             except ValueError:
                 conf = -1
             limpa = _norm(w)
-            if conf >= confianca and len(limpa) >= 4 and limpa.isalpha() and limpa not in NOSSOS:
+            if conf >= confianca and len(limpa) >= 4 and limpa.isalpha() and not any(limpa in n for n in NOSSOS):   # pedaco de selo nosso ("RACAO") nao conta
                 palavras.append(w)
-        if len(palavras) >= 2:                        # 1 palavra solta costuma ser ruido da textura
+        if palavras:                                  # rotulo real passa de 90 de confianca; textura e manuscrito ficam abaixo de 82
             achados.append((i, ' '.join(palavras[:8])))
     return achados

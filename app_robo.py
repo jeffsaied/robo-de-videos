@@ -11,7 +11,7 @@ import subprocess
 import sys
 import threading
 
-VERSAO = '1.2.0'
+VERSAO = '1.3.0'
 REPO = 'jeffsaied/robo-de-videos'
 CONGELADO = getattr(sys, 'frozen', False)
 SEM_JANELA = 0x08000000   # CREATE_NO_WINDOW

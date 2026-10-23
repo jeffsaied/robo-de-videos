@@ -10,7 +10,7 @@ Produz vídeos **sem limite por dia** (quantos pedir; agendado, 1 por dia) para 
 | 2. Roteiro | Escreve o roteiro só com o texto da fonte, na estrutura do canal (curiosidade → meio sem entregar → CTA → resposta) | Sim (1 chamada) |
 | 3. Fatos | Confere o roteiro contra a fonte; se achar problema, reescreve uma vez | Sim (1–2 chamadas) |
 | 4. Montar | `fabrica_tiktok.py`: imagens do Commons com licença conferida, voz edge-tts, legenda sincronizada, 1080×1920 | Não |
-| 5. Conferir | Duração, resolução, áudio, tamanho, créditos, licença NC, palavras a vigiar, **volume (-14 LUFS)**, **pronúncia (faster-whisper)** e **imagem repetida dos últimos 10 vídeos** (`robo\conferencias.py`) | Não |
+| 5. Conferir | Duração, resolução, áudio, tamanho, créditos, licença NC, palavras a vigiar, **volume (-14 LUFS)**, **pronúncia (faster-whisper)** e **imagem repetida dos últimos 10 vídeos**, **texto dentro das imagens (OCR Tesseract, eng+por; rótulo real passa de 88% de confiança)** (`robo\conferencias.py`) | Não |
 | 6. Fila | `robo\fila\<data>_<canal>_<tema>\`: vídeo, legenda do TikTok, hashtags, título/descrição/tags do YouTube, fontes e licenças | Não |
 
 Cada etapa fica gravada em `robo\robo.db` (SQLite). Se o ciclo cair, o próximo **retoma da etapa que faltou**. Dois ciclos ao mesmo tempo são bloqueados (`robo\robo.lock`). Um tema usado nunca volta.
@@ -63,3 +63,6 @@ O botão **Atualizar** lê a última release do GitHub; se a versão for maior, 
 ## Postagem
 
 O robô entrega tudo pronto e a pessoa posta. YouTube: a API oficial já funciona neste PC (`canal.py`), mas o robô não usa — publicar continua manual, por decisão do dono. TikTok: a Content Posting API exige app de desenvolvedor aprovado pela TikTok; sem auditoria ela só publica como privado.
+
+## Tesseract (OCR) neste PC
+Instalado em `C:\Program Files\Tesseract-OCR` (UB Mannheim 5.4.0, Apache 2.0, instalador silencioso `/S`). O português (`por.traineddata`, do tessdata_fast) foi copiado à mão para `tessdata`. Conferir com `tesseract --list-langs` (eng, osd, por). Sem o Tesseract, a conferência de texto nas imagens só não roda.
