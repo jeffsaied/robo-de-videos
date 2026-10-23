@@ -1,6 +1,6 @@
 # Robô de vídeos
 
-Produz **1 vídeo por dia** para qualquer canal (perfil em `canais\<canal>\canal.json`) e deixa na **fila** para uma pessoa conferir e postar. Ele **não publica nada sozinho**.
+Produz vídeos **sem limite por dia** (quantos pedir; agendado, 1 por dia) para qualquer canal (perfil em `canais\<canal>\canal.json`) e deixa na **fila** para uma pessoa conferir e postar. Ele **não publica nada sozinho**.
 
 ## Como funciona
 
@@ -41,7 +41,7 @@ powershell -ExecutionPolicy Bypass -File .\robo\agendar.ps1 -Hora 09:00 -Canal c
 
 - `provedor: "claude_cli"` (padrão): usa o `claude.exe` da extensão do VS Code, ou seja, a **assinatura do Claude**. Não há cobrança por chamada, mas há o limite de uso da assinatura. O custo gravado é só a estimativa que o próprio `claude.exe` informa.
 - `provedor: "anthropic_api"`: API paga. Precisa de `ANTHROPIC_API_KEY` no `.env` e da tabela `preco_por_milhao_usd` preenchida com os **preços oficiais** (hoje está zerada de propósito).
-- Limites: `max_chamadas_dia` (6) e `max_custo_usd_dia` (US$ 1). Ao atingir um deles o ciclo **para com segurança** e deixa o dossiê da pesquisa na fila (`..._SEM_ROTEIRO`).
+- Limites (0 = sem limite, que é o padrão): `videos_por_dia`, `max_chamadas_dia` e `max_custo_usd_dia` (este só vale para `anthropic_api`). Ao atingir um deles o ciclo **para com segurança** e deixa o dossiê da pesquisa na fila (`..._SEM_ROTEIRO`).
 - Mesma pergunta = resposta do cache (não gasta de novo).
 
 ## Novo canal

@@ -82,9 +82,9 @@ def chamar(c, cfg_ia, execucao, tarefa, prompt):
         c.commit()
         return guardado
     n, gasto = _gasto_hoje(c)
-    if n >= cfg_ia.get('max_chamadas_dia', 6):
+    if cfg_ia.get('max_chamadas_dia') and n >= cfg_ia['max_chamadas_dia']:
         raise SemOrcamento(f'limite de {cfg_ia.get("max_chamadas_dia")} chamadas de IA por dia atingido')
-    if gasto >= cfg_ia.get('max_custo_usd_dia', 1.0):
+    if cfg_ia.get('provedor') == 'anthropic_api' and cfg_ia.get('max_custo_usd_dia') and gasto >= cfg_ia['max_custo_usd_dia']:
         raise SemOrcamento(f'orçamento do dia atingido (US$ {gasto:.2f})')
     try:
         texto, ent, sai, custo = PROVEDORES[prov](cfg_ia, prompt)

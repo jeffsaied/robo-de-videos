@@ -1,6 +1,6 @@
 {
   "canal_padrao": "casos-curiosos",
-  "videos_por_dia": 1,
+  "videos_por_dia": 0,
   "tentativas_fatos": 1,
   "ia": {
     "ligada": true,
@@ -9,7 +9,7 @@
     "modelo_api": "claude-sonnet-5-5",
     "max_tokens": 8000,
     "tempo_limite_s": 600,
-    "max_chamadas_dia": 6,
+    "max_chamadas_dia": 0,
     "max_custo_usd_dia": 1.0,
     "preco_por_milhao_usd": {
       "entrada": 0,

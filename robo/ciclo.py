@@ -217,7 +217,7 @@ def produzir(canal, sem_ia=False, forcar=False):
         aberta = c.execute("select * from execucoes where canal=? and estado in ('rodando','falhou') order by id desc limit 1", (canal,)).fetchone()
         hoje = c.execute("select count(*) n from execucoes where canal=? and inicio like ? and estado not in ('rodando','falhou')",
                          (canal, date.today().isoformat() + '%')).fetchone()['n']
-        if not aberta and hoje >= conf.get('videos_por_dia', 1) and not forcar:
+        if not aberta and conf.get('videos_por_dia', 0) and hoje >= conf['videos_por_dia'] and not forcar:
             print(f'já há {hoje} vídeo(s) de hoje para "{canal}" (limite {conf.get("videos_por_dia", 1)}). Use --forcar para outro.')
             return None
         if aberta:
