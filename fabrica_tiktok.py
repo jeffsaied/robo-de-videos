@@ -476,9 +476,17 @@ def gerar(canal_id, roteiro_id):
         camada = Image.new('RGBA', capa.size, (0, 0, 0, 0))
         d = ImageDraw.Draw(camada)
         y = (ALT - len(linhas) * 175) // 2 - 80
+        # cor do texto pelo fundo: atras do bloco avermelhado ou claro demais, o vermelho some -> branco com contorno
+        area = capa.crop((70, y, LARG - 70, y + len(linhas) * 175)).convert('RGB').resize((120, 40))
+        pix = list(area.getdata())
+        fundo = tuple(sum(p[k] for p in pix) // len(pix) for k in range(3))
+        claro = 0.299 * fundo[0] + 0.587 * fundo[1] + 0.114 * fundo[2] > 130
+        # manchas vermelhas (flores, sangue de tinta, mapa) contam mesmo quando a media e bege
+        avermelhado = sum(1 for r_, g_, b_ in pix if r_ > 90 and r_ > 1.4 * g_ and r_ > 1.4 * b_) / len(pix) > 0.08
+        cor_capa = (255, 255, 255) if (claro or avermelhado) else _rgb(perfil['visual']['alerta'])
         for ln in linhas:
             x = (LARG - d.textlength(ln, font=fonte_capa)) // 2
-            d.text((x, y), ln, font=fonte_capa, fill=_rgb(perfil['visual']['alerta']), stroke_width=10, stroke_fill=(0, 0, 0))
+            d.text((x, y), ln, font=fonte_capa, fill=cor_capa, stroke_width=10, stroke_fill=(0, 0, 0))
             y += 175
         capa = Image.alpha_composite(capa.convert('RGBA'), camada).convert('RGB')
     capa.save(os.path.join(pasta, 'capa.jpg'), quality=92)
