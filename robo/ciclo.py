@@ -205,6 +205,8 @@ def etapa_fila(c, ex, canal, pasta, rot, dossie, conferencia):
     os.makedirs(destino, exist_ok=True)
     shutil.copy2(os.path.join(pasta, 'final.mp4'), os.path.join(destino, 'video.mp4'))
     shutil.copy2(os.path.join(pasta, 'tira_quadros.png'), os.path.join(destino, 'conferir_quadros.png'))
+    if os.path.exists(os.path.join(pasta, 'capa.jpg')):
+        shutil.copy2(os.path.join(pasta, 'capa.jpg'), os.path.join(destino, 'capa.jpg'))
     legenda = open(os.path.join(pasta, 'legenda.txt'), encoding='utf-8').read()
     hashtags = ' '.join('#' + h for h in rot.get('hashtags', []))
     open(os.path.join(destino, 'tiktok_legenda.txt'), 'w', encoding='utf-8').write(legenda)
@@ -212,6 +214,19 @@ def etapa_fila(c, ex, canal, pasta, rot, dossie, conferencia):
     titulo = rot['titulo'][:95] + ' #shorts'
     open(os.path.join(destino, 'youtube.txt'), 'w', encoding='utf-8').write(
         f'TÍTULO:\n{titulo}\n\nDESCRIÇÃO:\n{legenda}\n\nTAGS:\n{", ".join(rot.get("hashtags", []))}\n')
+    # Reels / Facebook / Kwai: mesmo video.mp4 (limpo, sem marca de outra rede); legenda propria de cada rede.
+    # Quem posta e o dono. Instagram/Facebook rebaixam repost sem edicao: a capa e o texto mudam, o video nao.
+    gancho = rot.get('post', '').split('\n')[0]
+    creditos_txt = legenda.split('\n\n')[1] if legenda.count('\n\n') >= 2 else ''
+    tags = rot.get('hashtags', [])
+    open(os.path.join(destino, 'outras_redes.txt'), 'w', encoding='utf-8').write(
+        'ARQUIVO: video.mp4 (sem marca d\'água de outra rede). CAPA: capa.jpg.\n\n'
+        '=== INSTAGRAM REELS (até 2.200 caracteres; o começo aparece cortado, então a pergunta vem primeiro) ===\n'
+        f'{gancho}\n\n{creditos_txt}\n\n' + ' '.join('#' + h for h in tags[:5]) + '\n\n'
+        '=== FACEBOOK REELS ===\n'
+        f'{gancho}\n\n{creditos_txt}\n\n' + ' '.join('#' + h for h in tags[:3]) + '\n\n'
+        '=== KWAI ===\n'
+        f'{gancho}\n' + ' '.join('#' + h for h in tags[:5]) + '\n')
     refs = rot.get('referencias') or [dossie['url']]
     open(os.path.join(destino, 'fontes.txt'), 'w', encoding='utf-8').write(
         'REFERÊNCIAS DO ROTEIRO:\n' + '\n'.join(refs) + '\n\nIMAGENS (licença e autor):\n' +

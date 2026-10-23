@@ -438,6 +438,29 @@ def gerar(canal_id, roteiro_id):
                ' '.join('#' + h for h in rot.get('hashtags', [])))
     open(os.path.join(pasta, 'legenda.txt'), 'w', encoding='utf-8').write(legenda)
     tira(final, os.path.join(pasta, 'tira_quadros.png'), total)
+    # capa: quadro da 1a cena com o gancho na tela (Reels/Kwai aceitam capa enviada; no TikTok, conferir a escolhida)
+    capa = Image.open(os.path.join(pasta, 'img0.jpg')).convert('RGB')          # imagem da cena 0, sem a legenda de baixo
+    capa = Image.blend(capa, Image.new('RGB', capa.size, (0, 0, 0)), 0.25)     # escurece um pouco para o texto saltar
+    if rot.get('gancho'):                                          # gancho em ate 3 linhas grandes, no meio
+        palavras, linhas, atual = rot['gancho'].upper().split(), [], ''
+        fonte_capa = ImageFont.truetype(perfil['visual']['fonte_titulo'], 150)
+        medir = ImageDraw.Draw(capa)
+        for p in palavras:
+            if atual and medir.textlength(atual + ' ' + p, font=fonte_capa) > LARG - 140:
+                linhas.append(atual)
+                atual = p
+            else:
+                atual = (atual + ' ' + p).strip()
+        linhas.append(atual)
+        camada = Image.new('RGBA', capa.size, (0, 0, 0, 0))
+        d = ImageDraw.Draw(camada)
+        y = (ALT - len(linhas) * 175) // 2 - 80
+        for ln in linhas:
+            x = (LARG - d.textlength(ln, font=fonte_capa)) // 2
+            d.text((x, y), ln, font=fonte_capa, fill=_rgb(perfil['visual']['alerta']), stroke_width=10, stroke_fill=(0, 0, 0))
+            y += 175
+        capa = Image.alpha_composite(capa.convert('RGBA'), camada).convert('RGB')
+    capa.save(os.path.join(pasta, 'capa.jpg'), quality=92)
     for arq in os.listdir(pasta):
         if re.match(r'(cena\d+\.mp4|leg\d+_\d+\.png|leg\d+\.json|cenas\.txt|gancho\.png|rotulo_som\.png)$', arq):
             os.remove(os.path.join(pasta, arq))
