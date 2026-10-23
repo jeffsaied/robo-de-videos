@@ -66,8 +66,9 @@ def licencas(arquivos):
     return livres
 
 
-def escolher(fontes, usados, minimo_texto=4000, minimo_imagens=4, avaliar=12):
-    """Melhor candidato ainda nao usado: (dossie) ou None. Sem IA."""
+def escolher(fontes, usados, minimo_texto=4000, minimo_imagens=4, avaliar=12, bonus=None):
+    """Melhor candidato ainda nao usado: (dossie) ou None. Sem IA.
+    `bonus(texto)` (0 a ~3, do placar: parecido com os melhores videos + termos em alta) soma 4000 pontos por unidade."""
     pontuados = []
     for t in candidatos(fontes):
         if chave(t) in usados or t.startswith(('Lista ', 'Categoria:')):
@@ -75,7 +76,9 @@ def escolher(fontes, usados, minimo_texto=4000, minimo_imagens=4, avaliar=12):
         a = artigo(t, fontes.get('wiki', 'pt'))
         if not a or len(a['texto']) < minimo_texto:
             continue
-        pontuados.append((len(a['texto']) + 600 * len(a['imagens']), a))
+        extra = bonus(a['titulo'] + ' ' + a['texto']) if bonus else 0
+        a['bonus_placar'] = round(extra, 2)
+        pontuados.append((len(a['texto']) + 600 * len(a['imagens']) + 4000 * extra, a))
         if len(pontuados) >= avaliar:
             break
     for _, a in sorted(pontuados, key=lambda x: -x[0]):

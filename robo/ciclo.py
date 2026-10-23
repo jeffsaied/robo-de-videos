@@ -35,13 +35,16 @@ def perfil(canal):
 def etapa_pesquisar(c, ex, canal, conf):
     usados = {r['chave'] for r in c.execute('select chave from temas where canal=?', (canal,))}
     fontes = perfil(canal).get('robo', {}).get('fontes', {})
-    d = pesquisa.escolher(fontes, usados)
+    from robo import placar
+    p = perfil(canal)
+    placar.resumo(p, os.path.join(RAIZ, 'canais', canal))   # canais/<canal>/placar.json atualizado a cada ciclo
+    d = pesquisa.escolher(fontes, usados, bonus=lambda texto: placar.bonus(texto, p))
     if not d:
         raise RuntimeError('nenhum tema novo com texto e imagens livres suficientes nas fontes configuradas')
     c.execute('insert or replace into temas values (?,?,?,?,?)', (canal, d['chave'], d['titulo'], ex, banco.agora()))
     c.execute('update execucoes set tema=?, slug=? where id=?', (d['titulo'], d['chave'], ex))
     c.commit()
-    log(ex, f'tema: {d["titulo"]} ({len(d["texto"])} letras, {len(d["imagens_livres"])} imagens livres)')
+    log(ex, f'tema: {d["titulo"]} ({len(d["texto"])} letras, {len(d["imagens_livres"])} imagens livres, bônus do placar {d.get("bonus_placar", 0)})')
     return {'titulo': d['titulo'], 'chave': d['chave'], 'url': d['url'], 'texto': d['texto'][:9000], 'imagens': d['imagens_livres']}
 
 

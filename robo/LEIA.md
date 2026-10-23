@@ -6,7 +6,7 @@ Produz vídeos **sem limite por dia** (quantos pedir; agendado, 1 por dia) para 
 
 | Etapa | O que faz | IA? |
 |---|---|---|
-| 1. Pesquisar | Wikipedia (categorias do perfil do canal) → escolhe um tema ainda não usado, com texto suficiente e pelo menos 4 imagens de licença livre no Commons | Não |
+| 1. Pesquisar | Wikipedia (categorias do perfil do canal) → escolhe um tema ainda não usado, com texto suficiente e pelo menos 4 imagens de licença livre no Commons; **o placar empurra a ordem**: tema parecido com os 3 vídeos de mais views/dia e com termos em alta (tendencias.py) ganha pontos (`robo/placar.py`) | Não |
 | 2. Roteiro | Escreve o roteiro só com o texto da fonte, na estrutura do canal (curiosidade → meio sem entregar → CTA → resposta) | Sim (1 chamada) |
 | 3. Fatos | Confere o roteiro contra a fonte; se achar problema, reescreve uma vez | Sim (1–2 chamadas) |
 | 4. Montar | `fabrica_tiktok.py`: imagens do Commons com licença conferida, voz edge-tts, legenda sincronizada, 1080×1920 | Não |
