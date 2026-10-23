@@ -4,7 +4,7 @@ para uma pessoa conferir e postar. Nao publica nada sozinho.
     python -m robo produzir [--canal arquivo-dark] [--sem-ia] [--forcar]
     python -m robo fila                      o que esta esperando aprovacao / postagem
     python -m robo aprovar <id>              conferido: pronto para postar
-    python -m robo postado <id> <tiktok|youtube> <link>
+    python -m robo postado <id> <tiktok|youtube|instagram|facebook|kwai> <link>
     python -m robo custos                    chamadas de IA e custo estimado (hoje e total)
     python -m robo retencao <youtube_id> [--pasta <saida do video>]   onde as pessoas saem (curva da API)
     python -m robo placar [--canal X]        videos do canal por views/dia (o mesmo placar que pesa na escolha do tema)

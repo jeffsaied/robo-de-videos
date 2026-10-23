@@ -1,75 +1,76 @@
 {
- "nome": "Casos Curiosos",
- "idioma": "pt-BR",
- "nicho": "histórias, fatos e casos curiosos reais",
- "motores": {
-  "voz": "edge"
- },
- "voz": {
-  "edge": {
-   "voz": "pt-BR-AntonioNeural",
-   "ritmo": "+0%",
-   "tom": "-6Hz"
+  "nome": "Casos Curiosos",
+  "idioma": "pt-BR",
+  "nicho": "histórias, fatos e casos curiosos reais",
+  "motores": {
+    "voz": "edge"
   },
-  "elevenlabs": {
-   "voz_id": "",
-   "modelo": "eleven_multilingual_v2",
-   "chave_arquivo": "credenciais/elevenlabs.txt"
+  "voz": {
+    "edge": {
+      "voz": "pt-BR-AntonioNeural",
+      "ritmo": "+0%",
+      "tom": "-6Hz"
+    },
+    "elevenlabs": {
+      "voz_id": "",
+      "modelo": "eleven_multilingual_v2",
+      "chave_arquivo": "credenciais/elevenlabs.txt"
+    }
+  },
+  "visual": {
+    "fundo": "#0A0A0E",
+    "destaque": "#FFC400",
+    "alerta": "#EB1E1E",
+    "texto": "#F0F0F0",
+    "apagado": "#787882",
+    "fonte_titulo": "C:/Windows/Fonts/impact.ttf",
+    "fonte_texto": "C:/Windows/Fonts/segoeui.ttf",
+    "fonte_texto_negrito": "C:/Windows/Fonts/segoeuib.ttf",
+    "fonte_texto_italico": "C:/Windows/Fonts/segoeuii.ttf",
+    "granulado": 6,
+    "crf": 22
+  },
+  "pausa_entre_frases": 0.32,
+  "regras_roteiro": [
+    "Todo fato verificável, com fonte; teoria sempre como hipótese, com contraponto.",
+    "O GANCHO também segue a regra de fatos: pode ser forte, mas não afirma o que não se sabe (mensagem, remetente, 'prova', 'real'). Prefira: 'Isso veio do espaço e nunca mais se repetiu'.",
+    "Sem 'mensagem', 'de quem' ou remetente quando não houver: o Wow! foi um sinal de rádio sem conteúdo, não uma mensagem.",
+    "Fala separada da tela; números por extenso na fala.",
+    "Imagem de concepção artística leva o selo ILUSTRAÇÃO; foto confusa leva marcador.",
+    "1 a 2 frases de opinião do narrador; estrutura e abertura variam entre vídeos.",
+    "A 2ª cena não pode ser ficha técnica (lugar, data, catálogo); ela aprofunda a pergunta do gancho e os dados vêm depois, misturados com tensão."
+  ],
+  "palavras_vigiar": [
+    "mensagem",
+    "remetente",
+    "de quem",
+    "prova",
+    "provou",
+    "real",
+    "comprovado"
+  ],
+  "estrutura_roteiro": [
+    "1. Os 2 primeiros segundos prendem pela CURIOSIDADE (gancho que abre uma pergunta, sem afirmar o que nao se sabe).",
+    "2. Desenvolver SEM entregar a resposta: cada frase cria expectativa e interesse para a proxima.",
+    "3. A resposta (o dado mais importante) so no FINAL. Logo ANTES dela, um CTA rapido de uma frase pedindo para se inscrever/seguir o canal; depois entrega a resposta."
+  ],
+  "cta_padrao": "Se inscreve no canal, que a resposta vem agora.",
+  "tiktok": {
+    "segundos_min": 61,
+    "segundos_max": 120
+  },
+  "robo": {
+    "fontes": {
+      "wiki": "pt",
+      "wikipedia_categorias": [
+        "Categoria:Mistérios não resolvidos",
+        "Categoria:Fenômenos inexplicados",
+        "Categoria:Desaparecimentos não resolvidos",
+        "Categoria:Lendas urbanas",
+        "Categoria:Fraudes",
+        "Categoria:Naufrágios"
+      ],
+      "temas_extras": []
+    }
   }
- },
- "visual": {
-  "fundo": "#0A0A0E",
-  "destaque": "#FFC400",
-  "alerta": "#EB1E1E",
-  "texto": "#F0F0F0",
-  "apagado": "#787882",
-  "fonte_titulo": "C:/Windows/Fonts/impact.ttf",
-  "fonte_texto": "C:/Windows/Fonts/segoeui.ttf",
-  "fonte_texto_negrito": "C:/Windows/Fonts/segoeuib.ttf",
-  "fonte_texto_italico": "C:/Windows/Fonts/segoeuii.ttf",
-  "granulado": 6,
-  "crf": 22
- },
- "pausa_entre_frases": 0.32,
- "regras_roteiro": [
-  "Todo fato verificável, com fonte; teoria sempre como hipótese, com contraponto.",
-  "O GANCHO também segue a regra de fatos: pode ser forte, mas não afirma o que não se sabe (mensagem, remetente, 'prova', 'real'). Prefira: 'Isso veio do espaço e nunca mais se repetiu'.",
-  "Sem 'mensagem', 'de quem' ou remetente quando não houver: o Wow! foi um sinal de rádio sem conteúdo, não uma mensagem.",
-  "Fala separada da tela; números por extenso na fala.",
-  "Imagem de concepção artística leva o selo ILUSTRAÇÃO; foto confusa leva marcador.",
-  "1 a 2 frases de opinião do narrador; estrutura e abertura variam entre vídeos."
- ],
- "palavras_vigiar": [
-  "mensagem",
-  "remetente",
-  "de quem",
-  "prova",
-  "provou",
-  "real",
-  "comprovado"
- ],
- "estrutura_roteiro": [
-  "1. Os 2 primeiros segundos prendem pela CURIOSIDADE (gancho que abre uma pergunta, sem afirmar o que nao se sabe).",
-  "2. Desenvolver SEM entregar a resposta: cada frase cria expectativa e interesse para a proxima.",
-  "3. A resposta (o dado mais importante) so no FINAL. Logo ANTES dela, um CTA rapido de uma frase pedindo para se inscrever/seguir o canal; depois entrega a resposta."
- ],
- "cta_padrao": "Se inscreve no canal, que a resposta vem agora.",
- "tiktok": {
-  "segundos_min": 61,
-  "segundos_max": 120
- },
- "robo": {
-  "fontes": {
-   "wiki": "pt",
-   "wikipedia_categorias": [
-    "Categoria:Mistérios não resolvidos",
-    "Categoria:Fenômenos inexplicados",
-    "Categoria:Desaparecimentos não resolvidos",
-    "Categoria:Lendas urbanas",
-    "Categoria:Fraudes",
-    "Categoria:Naufrágios"
-   ],
-   "temas_extras": []
-  }
- }
 }

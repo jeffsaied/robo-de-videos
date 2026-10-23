@@ -66,3 +66,10 @@ O robô entrega tudo pronto e a pessoa posta. YouTube: a API oficial já funcion
 
 ## Tesseract (OCR) neste PC
 Instalado em `C:\Program Files\Tesseract-OCR` (UB Mannheim 5.4.0, Apache 2.0, instalador silencioso `/S`). O português (`por.traineddata`, do tessdata_fast) foi copiado à mão para `tessdata`. Conferir com `tesseract --list-langs` (eng, osd, por). Sem o Tesseract, a conferência de texto nas imagens só não roda.
+
+## Novidades de 23/10/2026 (lista da revisora)
+- Placar (`robo/placar.py`, `python -m robo placar`): views/dia dos vídeos do canal (do tendencias.py); empurra a escolha do tema.
+- Retenção (`robo/retencao.py`, `python -m robo retencao <id> --pasta <saída>`): curva da API (vale para Shorts) e perda por cena. Rodar 48 h depois de cada vídeo.
+- Capa (`capa.jpg` na fila): imagem da cena 0 com o gancho grande.
+- Outras redes (`outras_redes.txt` na fila): texto para Reels, Facebook e Kwai; mesmo video.mp4. Quem posta é o dono.
+- Karaokê (teste A/B, DESLIGADO): `canal.json` → `visual.legenda_karaoke: true` acende a palavra falada em branco. Ligar só para o teste.

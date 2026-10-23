@@ -239,7 +239,9 @@ def etapa_fila(c, ex, canal, pasta, rot, dossie, conferencia):
         '1. Assista o video.mp4 (ou olhe conferir_quadros.png).\n'
         '2. TikTok: suba o video.mp4 e cole o tiktok_legenda.txt; escolha cada hashtag na lista que aparece ao digitar.\n'
         '3. YouTube Shorts: use o título, a descrição e as tags do youtube.txt.\n'
-        '4. Depois de postar: python -m robo postado ' + str(ex) + ' tiktok <link>   (e o mesmo para youtube)\n' + aviso + '\n')
+        '   Capa: capa.jpg (gancho na tela). No TikTok, em Edit cover, deixe o 1º quadro; no Reels/Kwai, envie a capa.jpg.\n'
+        '4. Reels, Facebook e Kwai (opcional): mesmo video.mp4, com o texto de cada rede em outras_redes.txt.\n'
+        '5. Depois de postar: python -m robo postado ' + str(ex) + ' <tiktok|youtube|instagram|facebook|kwai> <link>\n' + aviso + '\n')
     c.commit()
     return destino
 

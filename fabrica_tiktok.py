@@ -54,8 +54,9 @@ def _rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
-def legenda_png(texto, destino, perfil, destaque=False):
-    """Uma linha de legenda (os blocos ja vem cortados para caber)."""
+def legenda_png(texto, destino, perfil, destaque=False, acesa=None):
+    """Uma linha de legenda (os blocos ja vem cortados para caber). `acesa` = indice da palavra falada agora
+    (modo karaoke, perfil visual.legenda_karaoke): ela sai branca e um pouco maior; as outras na cor normal."""
     v = perfil['visual']
     fonte = ImageFont.truetype(v['fonte_titulo'], 122 if destaque else 96)
     img = Image.new('RGBA', (LARG, 420), (0, 0, 0, 0))
@@ -65,7 +66,13 @@ def legenda_png(texto, destino, perfil, destaque=False):
         fonte = ImageFont.truetype(v['fonte_titulo'], fonte.size - 4)
     cor = _rgb(v['alerta']) if destaque else _rgb(v['destaque'])
     x = (LARG - d.textlength(linha, font=fonte)) // 2
-    d.text((x, (420 - fonte.size) // 2 - 10), linha, font=fonte, fill=cor, stroke_width=8, stroke_fill=(0, 0, 0))
+    y = (420 - fonte.size) // 2 - 10
+    if acesa is None:
+        d.text((x, y), linha, font=fonte, fill=cor, stroke_width=8, stroke_fill=(0, 0, 0))
+    else:                                            # palavra a palavra, na mesma posicao do texto inteiro
+        for k, w in enumerate(linha.split(' ')):
+            d.text((x, y), w, font=fonte, fill=(255, 255, 255) if k == acesa else cor, stroke_width=8, stroke_fill=(0, 0, 0))
+            x += d.textlength(w + ' ', font=fonte)
     sombra = img.split()[3].filter(ImageFilter.GaussianBlur(14)).point(lambda a: a * 0.6)
     fundo = Image.new('RGBA', img.size, (0, 0, 0, 0))
     fundo.putalpha(sombra)
@@ -375,11 +382,25 @@ def gerar(canal_id, roteiro_id):
         blocos = [[t, ini - inicios[i], 0] for t, ini in zip(textos, alinhar_blocos(textos, pc))]
         for j, b in enumerate(blocos):
             b[2] = blocos[j + 1][1] if j + 1 < len(blocos) else duracoes[i]
-        json.dump(blocos, open(os.path.join(pasta, f'leg{i}.json'), 'w', encoding='utf-8'), ensure_ascii=False)
         tempos.append({'cena': i, 'inicio': inicios[i], 'palavras': pc,
                        'legenda': [[t, a + inicios[i], b + inicios[i]] for t, a, b in blocos]})
-        for j, (t, _, _) in enumerate(blocos):
-            legenda_png(t, os.path.join(pasta, f'leg{i}_{j}.png'), perfil, c.get('destaque'))
+        if perfil['visual'].get('legenda_karaoke'):   # teste A/B: cada bloco vira um quadro por palavra, com ela acesa
+            pedacos = []
+            for t, a, b in blocos:
+                ws = t.split()
+                pesos = [len(w) + 2 for w in ws]
+                ini = a
+                for k, w in enumerate(ws):
+                    fim = b if k == len(ws) - 1 else ini + (b - a) * pesos[k] / sum(pesos)
+                    pedacos.append((t, ini, fim, k))
+                    ini = fim
+            json.dump([[t, a, b] for t, a, b, _ in pedacos], open(os.path.join(pasta, f'leg{i}.json'), 'w', encoding='utf-8'), ensure_ascii=False)
+            for j, (t, _, _, k) in enumerate(pedacos):
+                legenda_png(t, os.path.join(pasta, f'leg{i}_{j}.png'), perfil, c.get('destaque'), acesa=k)
+        else:
+            json.dump(blocos, open(os.path.join(pasta, f'leg{i}.json'), 'w', encoding='utf-8'), ensure_ascii=False)
+            for j, (t, _, _) in enumerate(blocos):
+                legenda_png(t, os.path.join(pasta, f'leg{i}_{j}.png'), perfil, c.get('destaque'))
         canal.cena_video(i, duracoes[i], pasta)
 
     json.dump(tempos, open(os.path.join(pasta, 'tempos.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
