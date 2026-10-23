@@ -1,0 +1,12 @@
+{
+ "nicho": "mistérios reais explicados por teorias inteligentes (espaço, física, filosofia, história, ciência estranha)",
+ "frases": "10 a 13",
+ "modelo": "sonnet",
+ "motor_voz": "edge",
+ "voz_edge": "pt-BR-AntonioNeural",
+ "ritmo_edge": "-5%",
+ "tom_edge": "-6Hz",
+ "voz": "pt_BR-faber-medium.onnx",
+ "ritmo_voz": 0.92,
+ "privacidade": "public"
+}
